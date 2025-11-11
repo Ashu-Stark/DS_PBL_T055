@@ -1,0 +1,332 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --success: #10b981;
+    --error: #ef4444;
+    --warning: #f59e0b;
+    --bg: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --text: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --border: #475569;
+    --shadow: rgba(0, 0, 0, 0.3);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px 0;
+}
+
+header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+@media (max-width: 1024px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+.input-section, .output-section {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 40px var(--shadow);
+    border: 1px solid var(--border);
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px 20px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.tab-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+#code-input {
+    width: 100%;
+    min-height: 400px;
+    padding: 20px;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+#code-input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.upload-area {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 60px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--bg);
+}
+
+.upload-area:hover {
+    border-color: var(--primary);
+    background: var(--bg-tertiary);
+}
+
+.upload-area svg {
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+}
+
+.upload-area p {
+    color: var(--text-secondary);
+    margin: 5px 0;
+}
+
+.file-hint {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.file-name {
+    margin-top: 15px;
+    padding: 10px;
+    background: var(--bg);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.9rem;
+    display: none;
+}
+
+.file-name.show {
+    display: block;
+}
+
+.check-btn {
+    width: 100%;
+    padding: 16px;
+    margin-top: 20px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.check-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+}
+
+.check-btn:active {
+    transform: translateY(0);
+}
+
+.check-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.output-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.status-badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: none;
+}
+
+.status-badge.show {
+    display: block;
+}
+
+.status-badge.success {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--success);
+    border: 1px solid var(--success);
+}
+
+.status-badge.error {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--error);
+    border: 1px solid var(--error);
+}
+
+.output-content {
+    min-height: 400px;
+    max-height: 600px;
+    overflow-y: auto;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-secondary);
+}
+
+.placeholder svg {
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.error-list {
+    list-style: none;
+}
+
+.error-item {
+    padding: 15px;
+    margin-bottom: 12px;
+    background: rgba(239, 68, 68, 0.1);
+    border-left: 4px solid var(--error);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.success-message {
+    padding: 30px;
+    text-align: center;
+    color: var(--success);
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.error-message {
+    padding: 20px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--error);
+    border-radius: 8px;
+    color: var(--error);
+    margin-bottom: 20px;
+}
+
+/* Scrollbar styling */
+.output-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.output-content::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 4px;
+}
+
+.output-content::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+.output-content::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+/* Loading animation */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.btn-loader {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
+
+
