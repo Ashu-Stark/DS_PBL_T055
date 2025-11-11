@@ -44,7 +44,7 @@ echo Starting GUI server...
 echo.
 echo ========================================
 echo   Server will start on:
-echo   http://localhost:5000
+echo   http://localhost:5100
 echo ========================================
 echo.
 echo Press Ctrl+C to stop the server
