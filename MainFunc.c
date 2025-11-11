@@ -1,4 +1,3 @@
-//Here is the main functions used in Program.
 #include<stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -26,7 +25,6 @@ int checkdigit(char str)
     return 0;
 }
 
-// ---------------- IDENTIFIER / KEYWORD CHECK ----------------
 int identifier(char *token)
 {
     if (!((token[0] >= 'a' && token[0] <= 'z') ||
@@ -62,51 +60,17 @@ int datatype(char *tline)
     return 0;
 }
 
-// ---------------- REMOVE EXTRA SPACES ----------------
-// void removespace(char *str)
-// {
-//     int i = 0, j = 0;
-//     int flag2 = 0;
-//     while (str[i] == ' ' || str[i] == '\t')
-//         i++;
-//     for (; str[i] != '\0'; i++)
-//     {
-//         if (str[i] == ' ' || str[i] == '\t')
-//         {
-//             if (!flag2)
-//             {
-//                 str[j++] = ' ';
-//                 flag2 = 1;
-//             }
-//         }
-//         else if (str[i] == '\n')
-//         {
-//             continue;
-//         }
-//         else
-//         {
-//             str[j++] = str[i];
-//             flag2 = 0;
-//         }
-//     }
-//     if (j > 0 && str[j - 1] == ' ')
-//         j--;
-//     str[j] = '\0';
-// }
-
 void removespace(char *str)
 {
     int i = 0, j = 0;
-    int flag2 = 0; // for space control
-    int newline_flag = 0; // to detect blank lines
+    int flag2 = 0;
+    int newline_flag = 0;
 
-    // Skip leading spaces/tabs/newlines
     while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
         i++;
 
     for (; str[i] != '\0'; i++)
     {
-        // Handle spaces and tabs
         if (str[i] == ' ' || str[i] == '\t')
         {
             if (!flag2)
@@ -117,22 +81,19 @@ void removespace(char *str)
         }
         else if (str[i] == '\n')
         {
-            // Check if upcoming line is blank (only spaces/tabs/newlines)
             int k = i + 1;
             while (str[k] == ' ' || str[k] == '\t' || str[k] == '\n')
                 k++;
 
-            // If next non-space is '\0', stop (end of string)
             if (str[k] == '\0')
                 break;
 
-            // If next line is NOT blank, keep one newline
             if (str[k] != '\n' && str[k] != '\0')
                 str[j++] = '\n';
 
             flag2 = 0;
             newline_flag = 0;
-            i = k - 1; // skip the blank lines
+            i = k - 1;
         }
         else
         {
@@ -142,15 +103,12 @@ void removespace(char *str)
         }
     }
 
-    // Remove trailing space if any
     if (j > 0 && (str[j - 1] == ' ' || str[j - 1] == '\n'))
         j--;
 
     str[j] = '\0';
 }
 
-
-// ---------------- REMOVE COMMENTS ----------------
 void removeComments(char *line)
 {
     int i = 0, j = 0;
@@ -164,7 +122,7 @@ void removeComments(char *line)
 
         if (!flag1 && line[i] == '/' && line[i + 1] == '/')
         {
-            break; // skip rest of line (single-line comment)
+            break;
         }
         else if (!flag1 && line[i] == '/' && line[i + 1] == '*')
         {
@@ -183,7 +141,6 @@ void removeComments(char *line)
 
 int addvar(char *type, char *name, int line, struct queue *q)
 {
-    // Check redeclaration
     for (int i = 0; i < varCount; i++)
     {
         if (strcmp(varList[i].name, name) == 0)
@@ -195,7 +152,6 @@ int addvar(char *type, char *name, int line, struct queue *q)
         }
     }
 
-    // Add new variable
     strcpy(varList[varCount].name, name);
     strcpy(varList[varCount].type, type);
     varList[varCount].line = line;

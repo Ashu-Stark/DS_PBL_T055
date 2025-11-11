@@ -1,4 +1,3 @@
-//This is a Queue function which is used to store the error and print them.
 #include<stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,7 +10,7 @@ struct queue* create()
     q->front=q->rear=NULL;
     return q;
 }
-//
+
 void enque(struct queue*q,char *str)
 {
     struct node *temp=(struct node*)malloc(sizeof(struct node));

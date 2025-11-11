@@ -1,4 +1,3 @@
-//This Function checks theb braces opening , closing , missmatching.
 #include<stdio.h>
 #include"stack.h"
 #include "Braces.h"
@@ -32,11 +31,11 @@ void braces(char *line,int l,struct queue*q,struct stack *bracestack){
                 {
                     sprintf(err, "Extra closing brace '%c' at line %d\n", c, l);
                     enque(q, err);
-                }
             }
         }
+    }
 }
-//check the remaining stack is empty for extra braces.
+
 void checkremain(struct stack *bracestack,struct queue *q)
 {
     char err[200];

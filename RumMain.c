@@ -1,4 +1,3 @@
-// This is the main fucntion.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,11 +10,10 @@
 #include "Braces.h"
 #include "variable.h"
 #include "functionstore.h"
-// NEW CHANGE: Added function1.h for new function declaration and definition checker
 #include "function1.h"
 struct func f[NUMS];
 int funcCount = 0;
-int main()
+int main(int argc, char *argv[])
 {
     struct queue *q = create();
     int keywordcount = 42;
@@ -25,11 +23,15 @@ int main()
                         "signed", "sizeof", "static", "struct", "switch", "typedef", "union",
                         "unsigned", "void", "volatile", "while", "_Bool", "_Complex", "_Imaginary", "printf", "scanf", "strlen", "strcpy", "strcat", "strcmp"};
     struct stack *bracestack = initialize();
-    FILE *fp = fopen("input.c", "r");
+    char filename[500] = "input.c";
+    if (argc > 1)
+    {
+        strcpy(filename, argv[1]);
+    }
+    FILE *fp = fopen(filename, "r");
     char line[500];
     int l = 0;
-    // NEW CHANGE: Added variable to track if we're inside main function for function checking
-    int inMain = 0; // Track if we're inside main function
+    int inMain = 0;
 
     if (!fp)
     {
@@ -40,11 +42,7 @@ int main()
     while (fgets(line, sizeof(line), fp))
     {
         l++;
-        // Removing space
-
         removespace(line);
-
-        // Remove comments
         removeComments(line);
 
         if (line[0] == '\0' || line[0] == '\n')
@@ -57,21 +55,11 @@ int main()
         }
 
         braces(line, l, q, bracestack);
-
-        // Semicolon check
         semicolon(line, l, q);
-
-        // VARIABLE CHECK
         variable(line, l, q, keywordcount, keywords);
-        
-        // NEW CHANGE: Added function checker to detect function definitions, declarations, and calls
-        // This checks for: function definitions, declarations, calls, undefined functions, 
-        // functions called in main without definition, and multiple declarations
         checkFunctions(line, l, f, q, &inMain);
-        // printf("%s\n",line);
     }
 
-    //  REMAINING OPEN BRACES
     checkremain(bracestack, q);
 
     printf("The list of Error is given below:-\n\n");

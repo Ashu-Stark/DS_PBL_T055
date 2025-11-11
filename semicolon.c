@@ -1,28 +1,3 @@
-// // This function checks the required statement ending with or wihtout ";"
-// #include<stdio.h>
-// #include <string.h>
-// #include "QueueFunc.h"
-// #include "semicolon.h"
-// #include"queue.h"
-
-// void semicolon(char *line,int l,struct queue *q)
-// {
-//     int llen = strlen(line);
-//         if (line[llen - 1] == '\n')
-//             line[--llen] = '\0';
-//         if (!(line[llen - 1] == '{' || line[llen - 1] == ':' || line[llen - 1] == ','|| line[llen - 1] == '}' || line[llen - 1] == ')'|| line[0]=='#'))
-//         {
-//             if (line[llen - 1] != ';' )
-//             {
-//                 char err[200];
-//                 sprintf(err, "Missing ';' at line %d: %s\n", l, line);
-//                 enque(q, err);
-//             }
-//         }
-// }
-
-
-
 #include <stdio.h>
 #include <string.h> 
 #include "QueueFunc.h" 
@@ -34,20 +9,20 @@ void semicolon(char *line, int l, struct queue *q)
     int i, len = strlen(line);
     if (len == 0)
         return;
-    if (line[len - 1] == '\n')                              // remove newline
+    if (line[len - 1] == '\n')
     {                                  
         line[len - 1] = '\0';
         len--;
     }
 
-    int start = 0;                                          // skip leading spaces
+    int start = 0;
     while (line[start] == ' ' || line[start] == '\t')
     start++;
-    if (line[start] == '#')                                // ignore preprocessor
+    if (line[start] == '#')
     return;
-    if (line[start] == '\0')                                // blank line
+    if (line[start] == '\0')
     return;
-    if (strstr(line, "while") && line[start] != 'w')       //for do while check
+    if (strstr(line, "while") && line[start] != 'w')
     {
         if (!strchr(line, '(') || !strchr(line, ')'))
         {
@@ -65,12 +40,12 @@ void semicolon(char *line, int l, struct queue *q)
             enque(q, err);
             return;
         }
-        return;                                          // valid condition of do-while
+        return;
     }
 
-    if (strncmp(&line[start], "while", 5) == 0)          // for while check
+    if (strncmp(&line[start], "while", 5) == 0)
     {
-        if (!strchr(line, '(') || !strchr(line, ')'))    // must have '(' and ')'
+        if (!strchr(line, '(') || !strchr(line, ')'))
         {
             char err[200];
             sprintf(err, "Invalid while-loop syntax at line %d: %s", l, line);
@@ -78,7 +53,7 @@ void semicolon(char *line, int l, struct queue *q)
             return;
         }
 
-        char *closing = strrchr( line, ')');              // detect wrong while(condition);
+        char *closing = strrchr( line, ')');
         if (closing && closing[1] == ';')
         {
             char err[200];
@@ -86,10 +61,10 @@ void semicolon(char *line, int l, struct queue *q)
             enque(q, err);
             return;
         }
-        return;                                           // valid while()
+        return;
     }
 
-    if (strncmp (&line[start], "for", 3) == 0)             // for loop check 
+    if (strncmp (&line[start], "for", 3) == 0) 
     {
         int sc = 0;
         for (i = start; line[i] != '\0'; i++)
@@ -104,10 +79,10 @@ void semicolon(char *line, int l, struct queue *q)
             enque(q, err);
             return;
         }
-        return;                                      // valid for loop
+        return;
     }
 
-    char temp[300];                                  // remove comments
+    char temp[300];
     int k = 0;
     for (i = start; line[i] != '\0'; i++)
     {
@@ -117,7 +92,7 @@ void semicolon(char *line, int l, struct queue *q)
     }
     temp[k] = '\0';
 
-    while (k > 0 && (temp[k-1] == ' ' || temp[k-1] == '\t'))     // trim trailing spaces
+    while (k > 0 && (temp[k-1] == ' ' || temp[k-1] == '\t'))
     {
         temp[k-1] = '\0';
         k--;
@@ -126,12 +101,12 @@ void semicolon(char *line, int l, struct queue *q)
     return;
 
     char last = temp[k-1];
-    if (last == '{' || last == '}' || last == ':' || last == ')') //no need for ;
+    if (last == '{' || last == '}' || last == ':' || last == ')')
     return;
-    if (last == ';')                                             // already has a semicolon
+    if (last == ';')
     return;
 
-    char err[200];                                               //missing semicolon
+    char err[200];
     sprintf(err, "Missing ';' at line %d: %s", l, line);
     enque(q, err);
 }

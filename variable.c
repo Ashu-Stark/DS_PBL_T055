@@ -1,4 +1,3 @@
-//This function is check the variables,keywords,datatypes etc.
 #include <stdio.h>
 #include <string.h>
 #include "variable.h"
@@ -15,35 +14,25 @@ void variable(char *line, int l, struct queue *q, int keywordcount, char *keywor
     
     if (datatype(tline))   
     {
-        // Check if this is a function definition/declaration (has '(' after identifier)
         char *openParen = strchr(tline, '(');
         if (openParen != NULL)
         {
-            // This is a function definition/declaration
-            // Extract function parameters and add them as variables
-            // Format: "datatype funcName(type1 param1, type2 param2)"
-            
-            // Find the opening parenthesis
             char *paramStart = openParen + 1;
             char *paramEnd = strchr(paramStart, ')');
             
             if (paramEnd != NULL && paramEnd > paramStart)
             {
-                // Extract parameter section
                 int paramLen = paramEnd - paramStart;
                 char paramSection[500];
                 strncpy(paramSection, paramStart, paramLen);
                 paramSection[paramLen] = '\0';
                 
-                // Parse parameters: "float a, float b" or "int x"
                 char *paramToken = strtok(paramSection, ",");
                 while (paramToken != NULL)
                 {
-                    // Remove leading/trailing spaces
                     while (*paramToken == ' ' || *paramToken == '\t')
                         paramToken++;
                     
-                    // Extract type and parameter name
                     char paramType[50];
                     char paramName[50];
                     int typeIdx = 0, nameIdx = 0;
@@ -73,26 +62,20 @@ void variable(char *line, int l, struct queue *q, int keywordcount, char *keywor
                     paramType[typeIdx] = '\0';
                     paramName[nameIdx] = '\0';
                     
-                    // Add parameter as variable if valid
-                    // Note: Skip if already exists (allows same parameter names in different functions)
                     if (strlen(paramType) > 0 && strlen(paramName) > 0 && identifier(paramName))
                     {
-                        // Check if variable already exists - if so, skip (function-scoped parameters)
                         if (!present(paramName))
                         {
                             addvar(paramType, paramName, l, q);
                         }
-                        // If it exists, it's likely from another function, which is okay
                     }
                     
                     paramToken = strtok(NULL, ",");
                 }
             }
-            // Function parameters handled, return (don't check function body variables here)
             return;
         }
         
-        // Regular variable declaration (not a function)
         char *token = strtok(tline, " ,;{}()/*-+=");
         char type[20];
         strcpy(type, token);
@@ -125,8 +108,6 @@ void variable(char *line, int l, struct queue *q, int keywordcount, char *keywor
                 token[idx] = '\0';
                 idx = 0;
 
-                // Check if this token is followed by '(' - if so, it's a function call, skip it
-                // Function calls are handled by function1.c, not variable checker
                 int isFunctionCall = 0;
                 int j = i;
                 while (j < len && (tline[j] == ' ' || tline[j] == '\t'))

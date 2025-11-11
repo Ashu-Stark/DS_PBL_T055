@@ -7,7 +7,4 @@ void enque(struct queue * , char *);
 
 void print(struct queue*);
 
-
-// void enque(struct queue *q, char *error);
-
 #endif

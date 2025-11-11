@@ -8,17 +8,22 @@ import re
 app = Flask(__name__)
 CORS(app)
 
-# Path to the compiled syntax checker
 SYNTAX_CHECKER = "SyntaxChecker.exe" if os.name == 'nt' else "./SyntaxChecker"
 
 @app.route('/')
 def index():
-    """Serve the main HTML page"""
     return render_template('index.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
 
 @app.route('/check', methods=['POST'])
 def check_syntax():
-    """Check C code syntax"""
     try:
         data = request.get_json()
         code = data.get('code', '')
@@ -26,13 +31,11 @@ def check_syntax():
         if not code:
             return jsonify({'error': 'No code provided'}), 400
         
-        # Create a temporary file with the C code
         with tempfile.NamedTemporaryFile(mode='w', suffix='.c', delete=False) as temp_file:
             temp_file.write(code)
             temp_filename = temp_file.name
         
         try:
-            # Run the syntax checker
             result = subprocess.run(
                 [SYNTAX_CHECKER, temp_filename],
                 capture_output=True,
@@ -40,7 +43,6 @@ def check_syntax():
                 timeout=10
             )
             
-            # Parse the output
             output = result.stdout + result.stderr
             errors = parse_errors(output)
             
@@ -51,7 +53,6 @@ def check_syntax():
             })
             
         finally:
-            # Clean up temporary file
             if os.path.exists(temp_filename):
                 os.unlink(temp_filename)
     
@@ -61,21 +62,26 @@ def check_syntax():
         return jsonify({'error': str(e)}), 500
 
 def parse_errors(output):
-    """Parse error messages from syntax checker output"""
     errors = []
     lines = output.strip().split('\n')
     
+    skip_headers = True
     for line in lines:
         line = line.strip()
-        if line and not line.startswith('=') and line:
-            # Skip empty lines and separator lines
+        if not line:
+            continue
+        if "The list of Error" in line or "given below" in line:
+            skip_headers = False
+            continue
+        if line.lower() == "no error":
+            continue
+        if line and not line.startswith('='):
             if line and line != '':
                 errors.append(line)
     
     return errors
 
 if __name__ == '__main__':
-    # Check if syntax checker exists
     if not os.path.exists(SYNTAX_CHECKER):
         print(f"ERROR: {SYNTAX_CHECKER} not found!")
         print("Please compile it first using:")

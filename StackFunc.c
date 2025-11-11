@@ -1,4 +1,3 @@
-//There are basic functions of stack.
 #include <stdio.h>
 #include <stdlib.h>
 #include "StackFunc.h"

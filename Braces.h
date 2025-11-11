@@ -5,6 +5,5 @@
 
 void braces(char *,int ,struct queue*,struct stack *);
 
-// void checkremain(struct snode *,struct queue *);
 void checkremain(struct stack *bracestack,struct queue *q);
 #endif
